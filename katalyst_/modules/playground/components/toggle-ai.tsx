@@ -177,10 +177,10 @@ const ToggleAI: React.FC<ToggleAIProps> = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AIChatSidePanel
+      {/* <AIChatSidePanel
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
-      />
+      /> */}
     </>
   );
 };
