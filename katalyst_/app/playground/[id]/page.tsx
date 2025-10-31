@@ -3,6 +3,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from 'next/dynamic'; 
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { usePlayground } from "@/modules/playground/hooks/usePlayground";
@@ -10,12 +11,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { TemplateFileTree } from "@/modules/playground/components/playground-explorer";
 import { useFileExplorer } from "@/modules/playground/hooks/useFileExplorer";
 import { TemplateFile, TemplateFolder } from "@/modules/playground/lib/path-to-json";
-import { AlertCircle, FileText, FolderOpen, Save, Settings, X } from "lucide-react";
+import { AlertCircle, FileText, FolderOpen, Save, Settings, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { PlaygroundEditor } from "@/modules/playground/components/playground-editor";
+// import { PlaygroundEditor } from "@/modules/playground/components/playground-editor";
 import { useWebContainer } from "@/modules/webcontainers/hooks/useWebContainer";
 import WebContainerPreview from "@/modules/webcontainers/components/webcontainer-preview";
 import { LoadingStep } from "@/modules/playground/components/loader";
@@ -25,10 +26,35 @@ import ToggleAI from "@/modules/playground/components/toggle-ai";
 import { useAISuggestions } from "@/modules/playground/hooks/useAISuggestion";
 
 // === NEW IMPORTS FOR COLLABORATION ===
-import { YjsProvider } from "@/modules/collaboration/providers/YjsProvider";
+// import { YjsProvider } from "@/modules/collaboration/providers/YjsProvider";
 import { ActiveUsers } from "@/modules/collaboration/components/ActiveUsers";
 import { CollaborationToggle } from "@/modules/collaboration/components/CollaborationToggle";
 import { generateUsername, generateUserColor } from "@/modules/collaboration/lib/yjs-config";
+
+const YjsProvider = dynamic(
+  () => import('@/modules/collaboration/providers/YjsProvider').then(mod => mod.YjsProvider),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin" />
+        <span className="sr-only">Loading Collaboration...</span>
+      </div>
+    )
+  }
+);
+
+const PlaygroundEditor = dynamic(
+  () => import('@/modules/playground/components/playground-editor').then(mod => mod.PlaygroundEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-full w-full items-center justify-center bg-zinc-900">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+);
 
 const MainPlaygroundPage = () => {
   const { id } = useParams<{ id: string }>();

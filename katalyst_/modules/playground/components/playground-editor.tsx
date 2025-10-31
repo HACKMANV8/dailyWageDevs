@@ -51,6 +51,7 @@ export const PlaygroundEditor = ({
     editor: editorRef.current,
     monaco: monacoRef.current,
     fileId: activeFile ? `${activeFile.filename}.${activeFile.fileExtension}` : "",
+    initialContent: content,
     enabled: collaborationEnabled && !!activeFile,
   });
 

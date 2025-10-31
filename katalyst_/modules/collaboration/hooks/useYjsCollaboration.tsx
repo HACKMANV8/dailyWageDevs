@@ -13,6 +13,7 @@ interface UseYjsCollaborationProps {
   editor: MonacoEditor.IStandaloneCodeEditor | null;
   monaco: typeof import('monaco-editor') | null;
   fileId: string;
+  initialContent: string;
   enabled?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const useYjsCollaboration = ({
   editor,
   monaco,
   fileId,
+  initialContent,
   enabled = true
 }: UseYjsCollaborationProps) => {
   const { ydoc, provider, awareness } = useYjs();
@@ -46,11 +48,23 @@ export const useYjsCollaboration = ({
       const yText = ydoc.getText(`monaco-${fileId}`);
       yTextRef.current = yText;
 
+      if (yText.length === 0 && initialContent) {
+        console.log('[YjsCollaboration] Y.Text is empty, populating with initial content.');
+        ydoc.transact(() => {
+          yText.insert(0, initialContent);
+        });
+      }
+
       // Get the editor model
       const model = editor.getModel();
       if (!model) {
         console.error('[YjsCollaboration] No editor model available');
         return;
+      }
+
+      if (model.getValue() !== yText.toString()) {
+        console.warn('[YjsCollaboration] Editor model desynced. Forcing model update from Y.Text.');
+        model.setValue(yText.toString());
       }
 
       // Create Monaco binding
@@ -76,7 +90,7 @@ export const useYjsCollaboration = ({
     } catch (error) {
       console.error('[YjsCollaboration] Error setting up collaboration:', error);
     }
-  }, [editor, monaco, ydoc, provider, awareness, fileId, enabled]);
+  }, [editor, monaco, ydoc, provider, awareness, fileId, enabled,initialContent]);
 
   // Function to get current collaborative content
   const getCollaborativeContent = useCallback(() => {
@@ -101,4 +115,5 @@ export const useYjsCollaboration = ({
     yText: yTextRef.current,
     getCollaborativeContent,
     setCollaborativeContent
-  };
+  }
+}
