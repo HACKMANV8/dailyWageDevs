@@ -1,6 +1,6 @@
+import type { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import type { NextAuthOptions } from "next-auth";
 
 export default {
   providers: [
@@ -19,4 +19,4 @@ export default {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-} satisfies NextAuthOptions;
+} satisfies NextAuthConfig;
