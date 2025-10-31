@@ -15,7 +15,7 @@ export default async function DashboardLayout({
         REACT:"Zap",
         NEXTJS:"Lightbulb",
         EXPRESS:"Database",
-        VUE:"Compass",
+       VUE:"Compass",
         HONO:"FlameIcon",
         ANGULAR:"Terminal"
     }
@@ -37,8 +37,8 @@ export default async function DashboardLayout({
             {/* Main content */}
             <SidebarProvider className="relative z-10 flex min-h-screen w-full overflow-x-hidden">
                 {/* Dashboard Sidebar */}
-                {/* @ts-ignore-error */}
-                <DashboardSidebar initialPlaygroundData={formattedPlaygroundData} />
+                {/* @ts-ignore */}
+        <DashboardSidebar initialPlaygroundData={formattedPlaygroundData} />
                 <main className="flex-1">
                     {children}
                 </main>

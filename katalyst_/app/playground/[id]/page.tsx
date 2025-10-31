@@ -14,8 +14,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { PlaygroundEditor } from '@/modules/playground/components/playground-editor'
-//import { useWebContainer } from '@/modules/webcontainers/hooks/useWebContainer'
-//import WebContainerPreview from '@/modules/webcontainers/components/webcontainer-preview'
+import { useWebContainer } from '@/modules/webcontainers/hooks/useWebContainer'
+import WebContainerPreview from '@/modules/webcontainers/components/webcontainer-preview'
 import { LoadingStep } from '@/modules/playground/components/loader'
 import { toast } from 'sonner'
 import { findFilePath } from '@/modules/playground/lib'
@@ -193,8 +193,8 @@ const MainPlaygroundPage = () => {
         }
 
         // Use saveTemplateData to persist changes
-        const newTemplateData = await saveTemplateData(updatedTemplateData);
-        setTemplateData(newTemplateData || updatedTemplateData);
+        await saveTemplateData(updatedTemplateData);
+        setTemplateData(updatedTemplateData);
 
         // Update open files
         const updatedOpenFiles = openFiles.map((f) =>

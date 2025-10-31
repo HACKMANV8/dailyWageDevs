@@ -21,6 +21,7 @@ model User {
   accounts         Account[]
   role             UserRole      @default(USER)
   myPlayground     StarMark[]
+  chatMessages     ChatMessage[]
   staredPlayground Playground[]
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
@@ -65,6 +66,7 @@ model Playground {
   userId       String
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   Starmark     StarMark[]
+  githubRepo   GitHubRepo?
   TemplateFile TemplateFile?
 }
 
@@ -87,4 +89,28 @@ model TemplateFile {
   updatedAt    DateTime   @updatedAt
   playgroundId String     @unique
   playground   Playground @relation(fields: [playgroundId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid()) @map("_id")
+  userId    String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model GitHubRepo {
+  id           String     @id @default(cuid()) @map("_id")
+  playgroundId String     @unique
+  playground   Playground @relation(fields: [playgroundId], references: [id], onDelete: Cascade)
+  repoOwner    String
+  repoName     String
+  branch       String     @default("main")
+  accessToken  String?
+  lastSynced   DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
