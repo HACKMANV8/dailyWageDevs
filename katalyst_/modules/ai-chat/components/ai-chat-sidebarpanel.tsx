@@ -11,18 +11,14 @@ import {
     Send,
     User,
     Copy,
-
     X,
-
     Code,
     Sparkles,
     MessageSquare,
     RefreshCw,
-
     Settings,
     Zap,
     Brain,
-
     Search,
     Filter,
     Download,
@@ -509,20 +505,37 @@ export const AIChatSidePanel: React.FC<AIChatSidePanelProps> = ({
                                                     remarkPlugins={[remarkGfm, remarkMath]}
                                                     rehypePlugins={[rehypeKatex]}
                                                     components={{
+                                                        // THIS IS THE FIX: Add an override for 'p' tags
+                                                        p: ({ node, ...props }) => {
+                                                            // Check if the <p> tag contains a single <code> block
+                                                            if (node && node.children.length === 1 && node.children[0].tagName === 'code') {
+                                                                // If so, just render the <code> block directly without the <p> wrapper
+                                                                return <>{props.children}</>;
+                                                            }
+                                                            // Otherwise, render a normal <p> tag
+                                                            return <p {...props} />;
+                                                        },
                                                         code: ({ children, className, inline }) => {
                                                             if (inline) {
+                                                                // Inline code
                                                                 return (
                                                                     <code className="bg-zinc-800 px-1 py-0.5 rounded text-sm">
                                                                         {children}
                                                                     </code>
                                                                 );
                                                             }
+                                                            
+                                                            // Block code
+                                                            const preClasses = cn(
+                                                                "bg-zinc-800 rounded-lg p-4 my-4", // Classes from the old <div>
+                                                                "text-sm text-zinc-100 overflow-x-auto", // Classes from the <pre>
+                                                            );
+
+                                                            // Return a <pre> tag as the root
                                                             return (
-                                                                <div className="bg-zinc-800 rounded-lg p-4 my-4">
-                                                                    <pre className="text-sm text-zinc-100 overflow-x-auto">
-                                                                        <code className={className}>{children}</code>
-                                                                    </pre>
-                                                                </div>
+                                                                <pre className={preClasses}>
+                                                                    <code className={className}>{children}</code>
+                                                                </pre>
                                                             );
                                                         },
                                                     }}
