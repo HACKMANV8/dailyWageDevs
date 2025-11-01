@@ -384,17 +384,6 @@ YJS_SIGNALING_WS=ws://localhost:4444
 
 ---
 
-## 💡 Pitch (Hackathon)
-
-**Problem:** Setup friction, brittle environments, async collaboration pains.
-**Solution:** One-click, AI-native, multiplayer coding in-browser.
-**Differentiators:** Zero-setup runtime, built-in AI+collab, portable workspaces.
-**Impact:** Faster ideation, fewer blockers, better onboarding, more velocity.
-**Market:** Teams, bootcamps, OSS projects, hackathons, rapid MVPs.
-**Business Model:** Free tier + Pro + Team subscriptions.
-
----
-
 ## 👨‍💻 Team
 
 **Team:** dailyWageDevs
